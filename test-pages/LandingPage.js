@@ -5,6 +5,9 @@ export class GithubPage {
     this.WelcomeByNavigation = page.getByRole('navigation');
     this.sectionPage = page.locator('.section');
     this.SearchBar = page.locator('[data-testid="search-bar"]');
+    this.SearchButton = page.locator('[data-testid="search-bar"] ~ button');
+
+    
   }
 
   async gotoLandingPage() {
