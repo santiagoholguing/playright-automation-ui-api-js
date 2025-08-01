@@ -6,6 +6,9 @@ export class GithubPage {
     this.sectionPage = page.locator('.section');
     this.SearchBar = page.locator('[data-testid="search-bar"]');
     this.SearchButton = page.locator('[data-testid="search-bar"] ~ button');
+    this.RequestsAmount = page.locator('[data-testid="rate-limit"]');
+    this.UserInfoValues = page.locator('.section .item h3');
+
 
     
   }

@@ -3,7 +3,7 @@ import { GithubPage } from '../test-pages/LandingPage.js';
 import { amountElements, elements } from '../test-helpers/commands.js';
 
 
-test.only('validate github user', async ({ page }) => {
+test.only('validate github user', async ({ page, request }) => {
 
     
   const landingPage = new GithubPage(page);// Create an instance of the GithubPage class
@@ -12,9 +12,32 @@ test.only('validate github user', async ({ page }) => {
  
   await expect(page).toHaveTitle(/Github/); // Expect a tab title "to contain" a substring.
   await landingPage.WelcomeByHeading.isVisible()// validation without expect, this cannot be negative
-  await expect(landingPage.WelcomeByNavigation).toBeVisible() // validation with expect, this can be negative with "not" sentence
   await expect(landingPage.sectionPage).toHaveCount(3) // validation the amount of sections in the page
-   await expect(landingPage.SearchBar).toBeVisible() 
+  await expect(landingPage.WelcomeByNavigation).toBeVisible() // validation with expect, this can be negative with "not" sentence
+  await expect(landingPage.SearchBar).toBeVisible()
+  await page.fill('[data-testid="search-bar"]', 'santiagoholguing') // fill the search bar with a value
+  await expect(landingPage.SearchButton).toBeVisible() 
+  await landingPage.SearchButton.click() 
+  await expect(landingPage.RequestsAmount).toBeVisible()
+  await expect(landingPage.UserInfoValues).toHaveCount(4)
+  
+  
+   const response = await request.get('https://api.github.com/users/santiagoholguing');
+   expect(response.ok()).toBeTruthy();
+   const data = await response.json();
+   let userInfovaluesFromAPI = [] = [data.public_repos, data.followers, data.following, data.public_gists];
+   let userInfoValuesFromPage = [] = (await landingPage.UserInfoValues.allTextContents()).map(Number);
+   expect(userInfoValuesFromPage).toEqual(userInfovaluesFromAPI); // compare the values from the page with the values from the API
+
+
+  
+   
+   
+
+
+   
+
+  
 })
 
 test('get started link', async ({ page }) => {
