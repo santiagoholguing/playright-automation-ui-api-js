@@ -3,9 +3,10 @@ import { GithubPage } from '../test-pages/LandingPage.js';
 import { amountElements, elements } from '../test-helpers/commands.js';
 
 
-test.only('validate github user', async ({ page, request }) => {
-
-    
+const users= ['santiagoholguing','jdjuan', 'RanKey1496', 'danimebe'] 
+for (const user of users) {
+                        
+test.only(`validate github user ${user}`, async ({ page, request }) => {    
   const landingPage = new GithubPage(page);// Create an instance of the GithubPage class
   await landingPage.gotoLandingPage() // use method to navigate to the landing page
 
@@ -15,30 +16,25 @@ test.only('validate github user', async ({ page, request }) => {
   await expect(landingPage.sectionPage).toHaveCount(3) // validation the amount of sections in the page
   await expect(landingPage.WelcomeByNavigation).toBeVisible() // validation with expect, this can be negative with "not" sentence
   await expect(landingPage.SearchBar).toBeVisible()
-  await page.fill('[data-testid="search-bar"]', 'santiagoholguing') // fill the search bar with a value
+  await landingPage.SearchBar.fill(user) // fill the search bar with a value
   await expect(landingPage.SearchButton).toBeVisible() 
   await landingPage.SearchButton.click() 
   await expect(landingPage.RequestsAmount).toBeVisible()
   await expect(landingPage.UserInfoValues).toHaveCount(4)
-  
-  
-   const response = await request.get('https://api.github.com/users/santiagoholguing');
+   const response = await request.get('https://api.github.com/users/' + user); // make a request to the GitHub API for the user
    expect(response.ok()).toBeTruthy();
    const data = await response.json();
    let userInfovaluesFromAPI = [] = [data.public_repos, data.followers, data.following, data.public_gists];
    let userInfoValuesFromPage = [] = (await landingPage.UserInfoValues.allTextContents()).map(Number);
    expect(userInfoValuesFromPage).toEqual(userInfovaluesFromAPI); // compare the values from the page with the values from the API
-
-
-  
-   
-   
-
+   //console.log(await landingPage.RequestsAmount.count())
 
    
-
   
 })
+}
+
+
 
 test('get started link', async ({ page }) => {
   await page.goto('https://playwright.dev/');
