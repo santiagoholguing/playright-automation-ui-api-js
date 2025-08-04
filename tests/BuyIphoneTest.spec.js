@@ -27,8 +27,13 @@ test.only(`validate github user ${user}`, async ({ page, request }) => {
    let userInfovaluesFromAPI = [] = [data.public_repos, data.followers, data.following, data.public_gists];
    let userInfoValuesFromPage = [] = (await landingPage.UserInfoValues.allTextContents()).map(Number);
    expect(userInfoValuesFromPage).toEqual(userInfovaluesFromAPI); // compare the values from the page with the values from the API
-   //console.log(await landingPage.RequestsAmount.count())
-
+   
+    
+   //followers test
+  const data2 = (await request.get('https://api.github.com/users/' + user + '/followers?per_page=100')).json();
+  console.log(data.length) 
+  
+  console.log(await landingPage.Followers.count() )
    
   
 })

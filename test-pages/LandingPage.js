@@ -9,7 +9,7 @@ export class GithubPage {
     this.SearchButton = page.locator('[data-testid="search-bar"] ~ button');
     this.RequestsAmount = page.locator('[data-testid="rate-limit"]');
     this.UserInfoValues = page.locator('.section .item h3');
-    this.Followers = page.locator('.followers');
+    this.Followers = page.locator('.followers article');
     
   }
 
