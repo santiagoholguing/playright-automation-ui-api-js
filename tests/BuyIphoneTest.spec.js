@@ -22,6 +22,7 @@ test.only(`validate github user ${user}`, async ({ page, request }) => {
   await expect(landingPage.RequestsAmount).toBeVisible()
   await expect(landingPage.UserInfoValues).toHaveCount(4)
    const response = await request.get('https://api.github.com/users/' + user); // make a request to the GitHub API for the user
+   await page.waitForTimeout(2000)
    expect(response.ok()).toBeTruthy();
    const data = await response.json();
    let userInfovaluesFromAPI = [] = [data.public_repos, data.followers, data.following, data.public_gists];
@@ -30,11 +31,13 @@ test.only(`validate github user ${user}`, async ({ page, request }) => {
    
     
    //followers test
-  const data2 = (await request.get('https://api.github.com/users/' + user + '/followers?per_page=100')).json();
-  console.log(data.length) 
+   const data2 = await request.get('https://api.github.com/users/' + user + '/followers?per_page=100')
+  const response2 =await data2.json();
+  expect(response2.length).toEqual(await landingPage.Followers.count()); 
+
+
   
-  console.log(await landingPage.Followers.count() )
-   
+  
   
 })
 }
